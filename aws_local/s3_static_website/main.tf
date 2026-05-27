@@ -14,10 +14,19 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "static_website" {
-  bucket = "static_web_bucket"
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
+  bucket = "static-web-bucket"
+}
+
+
+resource "aws_s3_bucket_website_configuration" "static_website" {
+  bucket = aws_s3_bucket.static_website.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
   }
 }
 
@@ -32,9 +41,9 @@ data "aws_iam_policy_document" "get_object" {
     effect = "Allow"
     principals {
       type        = "*"
-      identifiers = "*"
+      identifiers = ["*"]
     }
-    actions   = "s3:GetObject"
-    resources = "arn:aws:s3:::static_website/*"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.static_website.arn}/*"]
   }
 }
