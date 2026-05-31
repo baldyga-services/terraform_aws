@@ -1,6 +1,7 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
+env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
