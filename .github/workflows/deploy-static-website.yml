@@ -1,0 +1,34 @@
+name: deploy static website
+run-name: ${{ github.actor}} is deploying website on s3 bucket \\\
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'aws_local/02_s3_static_website/www/**'
+  workflow_dispatch:
+
+jobs:
+  lint-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code and setup node
+        uses: actions/checkout@4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Linting HTML
+        run: |
+          echo "Linting webapp html"
+          npm install @linthtml/linthtml --save-dev
+          npx linthtml --init
+          npx linthtml 'aws_local/02_s3_static_website/www/*.html'
+
+      - name: Sync to Localstack S3
+        run: |
+          echo "Deploying code on website"
+          awslocal s3 sync aws_local/02_s3_static_website/www s3://static_website/
