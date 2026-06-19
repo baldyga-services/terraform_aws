@@ -13,10 +13,10 @@ jobs:
   lint-and-deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout code and setup node
+      #- name: Checkout code and setup node
       - uses: actions/checkout@4
 
-      - name: Setup Node.js
+      #- name: Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
